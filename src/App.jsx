@@ -72,7 +72,7 @@ function Counter({ value, suffix = "" }) {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(value * eased));
+      setCount(Number((value * eased).toFixed(2)));
       if (progress < 1) frame = requestAnimationFrame(step);
     };
 
@@ -80,7 +80,12 @@ function Counter({ value, suffix = "" }) {
     return () => cancelAnimationFrame(frame);
   }, [value]);
 
-  return <strong>{count}{suffix}</strong>;
+  return (
+  <strong>
+    {Number(value) % 1 !== 0 ? count.toFixed(2) : count}
+    {suffix}
+  </strong>
+);
 }
 
 function SectionHeading({ eyebrow, title, text }) {
@@ -298,9 +303,7 @@ function App() {
 
             <div className="about-grid">
               <Reveal className="profile-card">
-                <div className="profile-placeholder" role="img" aria-label="Profile photo placeholder">
-                  <span>MS</span>
-                </div>
+                <img className="profile-placeholder" src="/profile_picture.png" alt="Manav Sehgal"/>
                 <div className="profile-caption">
                   <div>
                     <h3>{profile.name}</h3>
@@ -331,10 +334,10 @@ function App() {
 
             <div className="counter-grid">
               {[
-                ["02+", "Core internships / roles"],
+                ["250+", "DSA problems"],
                 ["04+", "Featured projects"],
-                ["200+", "DSA problems"],
-                ["7.3", "Current CGPA"],
+                ["02+", "Core internships / roles"],
+                ["7.37", "Current CGPA"],
               ].map(([value, label], index) => (
                 <Reveal key={label} delay={index * 0.07} className="counter-card">
                   <Counter value={Number(value.replace("+", ""))} suffix={value.includes("+") ? "+" : ""} />
